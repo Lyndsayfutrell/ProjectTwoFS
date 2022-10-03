@@ -4,27 +4,85 @@ FSJS Project 2 - Data Pagination and Filtering
 */
 
 
+// Variables
+let ul = document.querySelector(".student-list");
+const buttonUL = document.querySelector(".link-list");
+let buttonLI;
+let page = 1;
+const itemsPerPage = 9;
+const list = data;
+let search = document.querySelector(".header");
 
 /*
-For assistance:
-   Check out the "Project Resources" section of the Instructions tab: https://teamtreehouse.com/projects/data-pagination-and-filtering#instructions
-   Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
+Adds list of students based on page number given from button eventlistener
 */
 
+function showPage(list, page) {
+   const startIndex = (page * itemsPerPage) - itemsPerPage;
+   const endIndex = page * itemsPerPage;
+   for(i=startIndex;i<endIndex;i++){
+      const student = list[i];
+      const name = student.name;
+      ul.innerHTML +=
+      `<li class="student-item cf">
+            <div class="student-details">
+               <img class="avatar" src="${student.picture.large}" alt="Profile Picture">
+               <h3>${name.first} ${name.last}</h3>
+               <span class="email">${student.email}</span>
+            </div>
+            <div class="joined-details">
+               <span class="date">Joined ${student.registered.date}</span>
+            </div>
+      </li>`;
+   }
+}
 
 
 /*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
+Function for adding buttons and event listener for buttons
 */
 
+function addPagination() {
+   const pages = Math.ceil(data.length / itemsPerPage);
+   let buttonCount = 1;
+   for(i=0;i<pages; i++){
+      buttonUL.innerHTML += `
+      <li>
+      <button type="button" class="li-button">${buttonCount}</button>
+      </li>
+      `;
+      buttonCount++;
+   }
+   buttonLI = document.getElementsByClassName("li-button");
+   buttonLI[page-1].classList.add("active");
 
+   buttonUL.addEventListener("click", e=> {
+      const checkNaN = e.target.innerHTML * 1;
+      if (isNaN(checkNaN)) {
+      } else {
+      buttonLI[page-1].classList.remove("active");
+      page = e.target.innerHTML;
+      buttonLI[page-1].classList.add("active");
+      ul.innerHTML = "";
+      showPage(data, page);
+      }
+   });
+}
 
-/*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
-*/
+// Add search function
 
-
+function addSearch() {
+   search.innerHTML += 
+   `<label for="search" class="student-search">
+      <span>Search by name</span>
+      <input id="search" placeholder="Search by name...">
+      <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+   </label>
+   `;
+}
 
 // Call functions
+
+showPage(list, page);
+addPagination();
+addSearch();
