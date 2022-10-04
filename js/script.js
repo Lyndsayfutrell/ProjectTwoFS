@@ -12,6 +12,7 @@ let page = 1;
 const itemsPerPage = 9;
 const list = data;
 let search = document.querySelector(".header");
+let searchBar;
 
 /*
 Adds list of students based on page number given from button eventlistener
@@ -79,7 +80,23 @@ function addSearch() {
       <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
    </label>
    `;
+   searchBar = document.querySelector("#search");
+   searchBar.addEventListener("input", e => {
+      const value = e.target.value.toLowerCase();
+      const studentLI = document.querySelectorAll(".student-item");
+   
+      for (i = 0; i < data.length; i++) {
+          if (!studentLI[i].innerHTML.toLowerCase().includes(value)) {
+              studentLI[i].style.display="none";
+          } else {
+          studentLI[i].style.display = "";
+          }}
+   
+   
+   })
+
 }
+
 
 // Call functions
 
